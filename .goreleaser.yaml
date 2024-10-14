@@ -1,0 +1,27 @@
+version: 2
+project_name: cloudflared
+builds:
+  - dir: ./src
+    main: ./cmd/cloudflared
+    flags:
+      - -mod=vendor
+      - -v
+      - -trimpath
+    ldflags:
+      - -X github.com/cloudflare/cloudflared/main.Version={{ .Version }}
+      - -s
+      - -w
+      - -buildid=
+      - -extldflags=-static
+    env:
+      - CGO_ENABLED=0
+    targets:
+      - freebsd_amd64
+      - freebsd_arm64
+archives:
+  - format: tar.gz
+    files:
+      - src/LICENSE
+    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}'
+release:
+  disable: true
