@@ -9,6 +9,7 @@ builds:
       - -trimpath
     ldflags:
       - -X main.Version={{ .Version }}
+      - -X main.BuildTime={{ .Date }}
       - -s
       - -w
       - -buildid=
